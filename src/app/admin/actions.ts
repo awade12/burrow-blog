@@ -36,11 +36,16 @@ export async function setupAction(formData: FormData): Promise<void> {
   if (!displayName || !email.includes('@') || password.length < 10) {
     redirect('/admin/setup?error=Fill everything in, and use a password of at least 10 characters.');
   }
+  let user;
   try {
-    const user = await setupOwner({ displayName, email, password, slug });
-    await createSession(user.id);
-  } catch {
-    redirect('/admin/setup?error=Setup is already complete. Log in instead.');
+    user = await setupOwner({ displayName, email, password, slug });
+  } catch (err) {
+    if (err instanceof Error && err.message === 'SETUP_DONE') {
+      redirect('/admin/setup?error=Setup is already complete. Log in instead.');
+    }
+    console.error('setup failed', err);
+    redirect('/admin/setup?error=Setup failed before anything was saved. Try again.');
   }
+  await createSession(user!.id);
   redirect('/admin');
 }

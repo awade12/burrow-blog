@@ -305,3 +305,11 @@
   .adm-textarea, .adm-preview-pane { min-height: 420px; }
   .adm input, .adm select, .adm textarea { font-size: 16px; }
 }
+
+/* The admin is its own app surface: hide the public site's header
+   and footer whenever an admin screen is on the page, so there is
+   one brand bar (the sidebar) instead of two. */
+body:has(.adm) .site-header,
+body:has(.adm) .site-footer {
+  display: none;
+}

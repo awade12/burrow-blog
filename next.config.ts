@@ -10,6 +10,17 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // Reader pages: brief shared caching, stale served while
+        // revalidating. Admin and API are never cached.
+        source: '/((?!admin|api|_next|media).*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
         source: '/:path*',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },

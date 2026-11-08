@@ -35,8 +35,9 @@ for (const post of data.posts) {
   }
   await client.query(
     `insert into posts (section, slug, title, excerpt, body_md, tags, author_id,
-       status, game, difficulty, published_at)
-     values ($1,$2,$3,$4,$5,$6,$7,'published',$8,$9, now())`,
+       status, game, difficulty, published_at, last_verified)
+     values ($1,$2,$3,$4,$5,$6,$7,'published',$8,$9, now(),
+             case when $1 = 'guides' then current_date end)`,
     [
       post.section, post.slug, post.title, post.excerpt ?? '', post.body,
       post.tags ?? [], authorIds[post.authorSlug] ?? authorIds['burrow-team'],

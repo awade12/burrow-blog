@@ -13,6 +13,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Build-time placeholders only: config.ts validates env at import.
+# Real values arrive from the environment at runtime (compose .env).
+ENV DATABASE_URL=postgres://build:build@localhost:5432/build
+ENV SESSION_SECRET=build-time-placeholder-not-a-real-secret
+ENV SITE_URL=http://localhost:3000
 RUN npm run build
 
 FROM node:22-alpine AS run
@@ -28,6 +33,9 @@ COPY --from=prod-deps /app/node_modules ./node_modules
 COPY db ./db
 COPY scripts ./scripts
 COPY src/content ./src/content
+# Source files arrive with restrictive host perms; the app runs as
+# the unprivileged warren user, so make the tree readable by it.
+RUN chown -R warren:warren /app
 USER warren
 EXPOSE 3000
 CMD ["node", "server.js"]

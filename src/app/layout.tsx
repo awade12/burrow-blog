@@ -32,8 +32,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/guides">Guides</Link>
               <Link href="/updates">Updates</Link>
               <Link href="/search">Search</Link>
-              <a className="cta-button" href="https://burrowservers.com">Burrow servers</a>
             </nav>
+            <a className="cta-button" href="https://burrowservers.com">Burrow servers</a>
           </div>
         </header>
         <main>{children}</main>

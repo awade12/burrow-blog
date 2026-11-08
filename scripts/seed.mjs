@@ -35,13 +35,13 @@ for (const post of data.posts) {
   }
   await client.query(
     `insert into posts (section, slug, title, excerpt, body_md, tags, author_id,
-       status, game, difficulty, published_at, last_verified)
+       status, game, difficulty, published_at, last_verified, cover_path)
      values ($1,$2,$3,$4,$5,$6,$7,'published',$8,$9, now(),
-             case when $1 = 'guides' then current_date end)`,
+             case when $1 = 'guides' then current_date end, $10)`,
     [
       post.section, post.slug, post.title, post.excerpt ?? '', post.body,
       post.tags ?? [], authorIds[post.authorSlug] ?? authorIds['burrow-team'],
-      post.game ?? null, post.difficulty ?? null,
+      post.game ?? null, post.difficulty ?? null, post.cover ?? null,
     ],
   );
   console.log(`seeded: ${post.slug}`);

@@ -3,13 +3,18 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div className="narrow" style={{ textAlign: 'center', padding: '70px 20px' }}>
-      <Image src="/burrow-mark.png" alt="" width={190} height={116} />
-      <h1 style={{ fontSize: 34, margin: '16px 0 8px' }}>This tunnel goes nowhere.</h1>
-      <p style={{ color: 'var(--muted)' }}>
-        The page you dug for is not here. Try the <Link href="/guides">guides</Link>,
-        the <Link href="/search">search</Link>, or head back to the <Link href="/">surface</Link>.
+    <div className="narrow notfound">
+      <Image className="notfound-mark" src="/burrow-mark.png" alt="" width={190} height={116} />
+      <p className="eyebrow muted">404</p>
+      <h1>This tunnel goes nowhere.</h1>
+      <p>
+        The page you dug for is not here. Try the guides, run a search,
+        or head back to the surface.
       </p>
+      <div className="hero-actions">
+        <Link className="cta-button" href="/">Back to the surface</Link>
+        <Link className="ghost-button" href="/guides">Browse guides</Link>
+      </div>
     </div>
   );
 }

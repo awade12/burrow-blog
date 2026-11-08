@@ -12,14 +12,18 @@ export default async function BlogIndex() {
   const posts = await listPublished('blog', 60);
   return (
     <div className="wrap">
-      <section className="hero">
+      <section className="page-head">
+        <p className="eyebrow muted">The Warren · Blog</p>
         <h1>Blog</h1>
         <p>Stories, the math behind split servers, and notes from two people in Texas building Burrow.</p>
       </section>
-      <div className="grid">
-        {posts.map((p) => <PostCard key={p.id} post={p} />)}
-      </div>
-      {posts.length === 0 ? <p>Nothing here yet.</p> : null}
+      {posts.length ? (
+        <div className="grid" style={{ marginTop: 30 }}>
+          {posts.map((p) => <PostCard key={p.id} post={p} />)}
+        </div>
+      ) : (
+        <p className="empty" style={{ marginTop: 30 }}>Nothing here yet. First post is being written.</p>
+      )}
     </div>
   );
 }

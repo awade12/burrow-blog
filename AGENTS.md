@@ -27,9 +27,11 @@ trust. When a rule here conflicts with finishing faster, the rule wins.
 6. **No new runtime dependency without a written justification** in the
    PR description (what it replaces, its size, why stdlib or an existing
    dep cannot do it).
-7. **No webfont downloads on reader pages** (system font stack), no
-   client-side data fetching for content, images always carry width and
-   height, uploads are served with immutable cache headers.
+7. **No third-party font services.** Typography is the self-hosted
+   Inter Variable (one woff2, `next/font/local`, display swap);
+   external font CDNs are banned. No client-side data fetching for
+   content, images always carry width and height, uploads are served
+   with immutable cache headers.
 8. Every public route sets deliberate cache headers. HTML: short
    `s-maxage` with `stale-while-revalidate`. Static assets: immutable.
 

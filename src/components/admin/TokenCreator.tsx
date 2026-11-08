@@ -9,7 +9,8 @@ export default function TokenCreator() {
   const [pending, start] = useTransition();
 
   return (
-    <div className="panel" style={{ marginBottom: 22 }}>
+    <div className="adm-card" style={{ marginBottom: 22 }}>
+      <h3 className="adm-card-title">New token</h3>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -23,12 +24,16 @@ export default function TokenCreator() {
       >
         <label htmlFor="name">Token name</label>
         <input id="name" name="name" type="text" placeholder="ivy drafts" required />
-        <p><button type="submit" disabled={pending}>{pending ? 'Creating...' : 'Create token'}</button></p>
+        <p style={{ marginBottom: token || error ? undefined : 0 }}>
+          <button className="adm-btn primary" type="submit" disabled={pending}>
+            {pending ? 'Creating...' : 'Create token'}
+          </button>
+        </p>
       </form>
-      {error ? <p className="error">{error}</p> : null}
+      {error ? <p className="adm-banner error" style={{ marginBottom: 0 }}>{error}</p> : null}
       {token ? (
         <div>
-          <p className="notice">
+          <p className="adm-banner notice" style={{ marginBottom: 10 }}>
             Copy this now. It is shown once, and only a hash is stored.
           </p>
           <code style={{ wordBreak: 'break-all', fontSize: 14 }}>{token}</code>

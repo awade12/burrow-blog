@@ -17,14 +17,18 @@ export default async function TagPage({ params }: Props) {
   const posts = await listPublishedByTag(decoded);
   return (
     <div className="wrap">
-      <section className="hero">
+      <section className="page-head">
+        <p className="eyebrow muted">The Warren · Tag</p>
         <h1>#{decoded}</h1>
         <p>{posts.length} post{posts.length === 1 ? '' : 's'} with this tag.</p>
       </section>
-      <div className="grid">
-        {posts.map((p) => <PostCard key={p.id} post={p} />)}
-      </div>
-      {posts.length === 0 ? <p>Nothing tagged like that yet.</p> : null}
+      {posts.length ? (
+        <div className="grid" style={{ marginTop: 30 }}>
+          {posts.map((p) => <PostCard key={p.id} post={p} />)}
+        </div>
+      ) : (
+        <p className="empty" style={{ marginTop: 30 }}>Nothing tagged like that yet.</p>
+      )}
     </div>
   );
 }

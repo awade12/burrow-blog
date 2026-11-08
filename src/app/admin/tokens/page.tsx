@@ -18,35 +18,51 @@ export default async function TokensPage() {
   );
   return (
     <div>
-      <h1 style={{ marginTop: 0 }}>API tokens</h1>
-      <p style={{ color: 'var(--muted)', maxWidth: 640 }}>
-        Tokens can create and edit <strong>drafts only</strong> through
-        <code> /api/v1/drafts</code>. They can never publish. Publishing always
-        happens here, by a person.
-      </p>
+      <div className="adm-page-head">
+        <div className="grow">
+          <p className="adm-eyebrow">Automation</p>
+          <h1 className="adm-title">API tokens</h1>
+          <p className="adm-sub">
+            Tokens can create and edit <strong>drafts only</strong> through{' '}
+            <span className="adm-code">/api/v1/drafts</span>. They can never publish.
+            Publishing always happens here, by a person.
+          </p>
+        </div>
+      </div>
       <TokenCreator />
-      <table className="admin">
-        <thead><tr><th>Name</th><th>Scope</th><th>Created</th><th>Last used</th><th>Status</th><th /></tr></thead>
-        <tbody>
-          {tokens.map((t) => (
-            <tr key={t.id}>
-              <td>{t.name}</td>
-              <td>{t.scope}</td>
-              <td>{new Date(t.created_at).toLocaleDateString('en-US')}</td>
-              <td>{t.last_used_at ? new Date(t.last_used_at).toLocaleString('en-US') : 'never'}</td>
-              <td>{t.revoked_at ? 'revoked' : 'active'}</td>
-              <td>
-                {!t.revoked_at ? (
-                  <form action={revokeTokenAction.bind(null, t.id)}>
-                    <button className="danger" type="submit">Revoke</button>
-                  </form>
-                ) : null}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {tokens.length === 0 ? <p style={{ color: 'var(--muted)' }}>No tokens yet.</p> : null}
+      {tokens.length ? (
+        <div className="adm-tablewrap">
+          <table className="adm-table">
+            <thead><tr><th>Name</th><th>Scope</th><th>Created</th><th>Last used</th><th>Status</th><th /></tr></thead>
+            <tbody>
+              {tokens.map((t) => (
+                <tr key={t.id}>
+                  <td className="t">{t.name}</td>
+                  <td className="muted">{t.scope}</td>
+                  <td className="muted">{new Date(t.created_at).toLocaleDateString('en-US')}</td>
+                  <td className="muted">{t.last_used_at ? new Date(t.last_used_at).toLocaleString('en-US') : 'never'}</td>
+                  <td>
+                    {t.revoked_at
+                      ? <span className="adm-pill">revoked</span>
+                      : <span className="adm-pill published">active</span>}
+                  </td>
+                  <td>
+                    {!t.revoked_at ? (
+                      <div className="adm-rowactions">
+                        <form action={revokeTokenAction.bind(null, t.id)}>
+                          <button className="adm-btn sm danger" type="submit">Revoke</button>
+                        </form>
+                      </div>
+                    ) : null}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className="adm-empty">No tokens yet.</p>
+      )}
     </div>
   );
 }

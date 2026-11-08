@@ -18,33 +18,42 @@ export default async function MediaPage({
   );
   return (
     <div>
-      <h1 style={{ marginTop: 0 }}>Media</h1>
-      {error ? <p className="error">{error}</p> : null}
-      {saved ? <p className="notice">Uploaded.</p> : null}
-      <form action={uploadAction} className="panel" style={{ marginBottom: 22 }}>
+      <div className="adm-page-head">
+        <div className="grow">
+          <p className="adm-eyebrow">Library</p>
+          <h1 className="adm-title">Media</h1>
+          <p className="adm-sub">Upload an image, then paste its path into a post or the cover field.</p>
+        </div>
+      </div>
+      {error ? <p className="adm-banner error">{error}</p> : null}
+      {saved ? <p className="adm-banner notice">Uploaded. It is in the library below.</p> : null}
+      <form action={uploadAction} className="adm-card" style={{ marginBottom: 22 }}>
+        <h3 className="adm-card-title">Upload</h3>
         <label htmlFor="file">Image (png, jpg, webp, gif, svg, max 8 MB)</label>
         <input id="file" name="file" type="file" accept="image/*" required />
         <label htmlFor="alt">Alt text</label>
         <input id="alt" name="alt" type="text" placeholder="What is in this image?" />
-        <p><button type="submit">Upload</button></p>
+        <p style={{ marginBottom: 0 }}>
+          <button className="adm-btn primary" type="submit">Upload image</button>
+        </p>
       </form>
-      <div className="grid">
+      <div className="adm-media-grid">
         {items.map((m) => {
           const url = mediaUrl(m.stored_name);
           const md = `![${m.alt}](${url})`;
           return (
-            <div className="card" key={m.id}>
-              <Image className="cover" src={url} alt={m.alt} width={640} height={320} unoptimized />
-              <div className="body">
-                <strong style={{ fontSize: 14 }}>{m.filename}</strong>
-                <code style={{ fontSize: 12.5, wordBreak: 'break-all' }}>{url}</code>
-                <code style={{ fontSize: 12.5, wordBreak: 'break-all', color: 'var(--muted)' }}>{md}</code>
+            <div className="adm-media-card" key={m.id}>
+              <Image className="thumb" src={url} alt={m.alt} width={640} height={320} unoptimized />
+              <div className="b">
+                <span className="fn">{m.filename}</span>
+                <code>{url}</code>
+                <code>{md}</code>
               </div>
             </div>
           );
         })}
       </div>
-      {items.length === 0 ? <p style={{ color: 'var(--muted)' }}>No uploads yet.</p> : null}
+      {items.length === 0 ? <p className="adm-empty">No uploads yet.</p> : null}
     </div>
   );
 }

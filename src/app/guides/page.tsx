@@ -19,23 +19,32 @@ export default async function GuidesIndex({
   const posts = game ? await listPublishedByGame(game) : await listPublished('guides', 60);
   return (
     <div className="wrap">
-      <section className="hero">
-        <h1>Guides</h1>
+      <section className="page-head">
+        <p className="eyebrow muted">The Warren · Guides</p>
+        <h1>{game ? `${game} guides` : 'Guides'}</h1>
         <p>Set up a server, split the bill, keep it running. Pick a game, or browse everything.</p>
       </section>
       {games.length ? (
-        <div className="chips" style={{ marginBottom: 22 }}>
-          <Link className="chip" href="/guides">All games</Link>
+        <div className="chips" style={{ margin: '24px 0 26px' }}>
+          <Link className={`chip${game ? '' : ' active'}`} href="/guides">All games</Link>
           {games.map((g) => (
-            <Link key={g} className="chip" href={`/guides?game=${encodeURIComponent(g)}`}>{g}</Link>
+            <Link
+              key={g}
+              className={`chip${game === g ? ' active' : ''}`}
+              href={`/guides?game=${encodeURIComponent(g)}`}
+            >
+              {g}
+            </Link>
           ))}
         </div>
       ) : null}
-      {game ? <h2 className="section-title">{game} guides</h2> : null}
-      <div className="grid">
-        {posts.map((p) => <PostCard key={p.id} post={p} />)}
-      </div>
-      {posts.length === 0 ? <p>No guides here yet.</p> : null}
+      {posts.length ? (
+        <div className="grid">
+          {posts.map((p) => <PostCard key={p.id} post={p} />)}
+        </div>
+      ) : (
+        <p className="empty">No guides here yet. The first ones are being dug.</p>
+      )}
     </div>
   );
 }

@@ -31,7 +31,7 @@ things well (blog posts, guides, updates).
 - RSS (combined and per section), sitemap, canonical URLs, Open
   Graph, JSON-LD, reading time, tables of contents on guides
 - Fast by construction: reader pages are Server Components with no
-  client JS beyond the framework runtime, no webfonts, short
+  client JS beyond the framework runtime, one self-hosted variable font, short
   `s-maxage` caching with stale-while-revalidate
 
 ## Quickstart

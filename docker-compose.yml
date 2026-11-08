@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_USER:-warren}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:?Set PG_PASSWORD in .env}
+      POSTGRES_DB: ${PG_DATABASE:-warren}
+    volumes:
+      - warren-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    build: .
+    restart: "no"
+    environment:
+      DATABASE_URL: postgres://${PG_USER:-warren}:${PG_PASSWORD}@db:5432/${PG_DATABASE:-warren}
+    command: ["node", "scripts/migrate.mjs"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://${PG_USER:-warren}:${PG_PASSWORD}@db:5432/${PG_DATABASE:-warren}
+      SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET in .env}
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - warren-uploads:/app/uploads
+    ports:
+      - "127.0.0.1:${APP_PORT:-3100}:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+
+volumes:
+  warren-db:
+  warren-uploads:

@@ -1,0 +1,35 @@
+{
+  "name": "burrow-blog",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Warren: a tiny, fast CMS for Burrow's blog, guides and updates.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "typecheck": "tsc --noEmit",
+    "migrate": "node scripts/migrate.mjs",
+    "seed": "node scripts/seed.mjs",
+    "create-token": "node scripts/create-token.mjs",
+    "check:size": "node scripts/check-file-size.mjs"
+  },
+  "dependencies": {
+    "highlight.js": "^11.11.1",
+    "marked": "^15.0.0",
+    "next": "^15.1.0",
+    "pg": "^8.13.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sanitize-html": "^2.13.0",
+    "marked-highlight": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/sanitize-html": "^2.13.0",
+    "typescript": "^5.7.0"
+  }
+}

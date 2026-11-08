@@ -1,0 +1,33 @@
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm install --no-audit --no-fund
+
+FROM node:22-alpine AS prod-deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm install --omit=dev --no-audit --no-fund
+
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm run build
+
+FROM node:22-alpine AS run
+WORKDIR /app
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1
+RUN addgroup -S warren && adduser -S warren -G warren && mkdir -p /app/uploads && chown warren:warren /app/uploads
+# Standalone server (traced, minimal) for the app itself.
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
+# Scripts (migrate, seed, create-token) run on production deps only.
+COPY --from=prod-deps /app/node_modules ./node_modules
+COPY db ./db
+COPY scripts ./scripts
+COPY src/content ./src/content
+USER warren
+EXPOSE 3000
+CMD ["node", "server.js"]
